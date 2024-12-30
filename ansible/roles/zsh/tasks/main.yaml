@@ -1,0 +1,38 @@
+---
+- name: Install required apps
+  aur:
+    name: 
+      - zsh
+      - zsh-antidote
+      - eza
+      - bat
+      - zoxide
+    user: "{{ aur_user }}"
+
+- name: Git checkout .zsh repo
+  ansible.builtin.git:
+    repo: 'https://github.com/DACC4/.zsh.git'
+    dest: "/home/{{ aur_user }}/.arch-bootstrap/.zsh"
+
+- name: Copy .zshrc file
+  copy:
+    src: "/home/{{ aur_user }}/.arch-bootstrap/.zsh/.zshrc"
+    dest: "/home/{{ aur_user }}/.zshrc"
+    remote_src: yes
+    owner: "{{ aur_user }}"
+    group: "{{ aur_user }}"
+    mode: '0644'
+
+- name: Copy .zsh_plugins.txt file
+  copy:
+    src: "/home/{{ aur_user }}/.arch-bootstrap/.zsh/.zsh_plugins.txt"
+    dest: "/home/{{ aur_user }}/.zsh_plugins.txt"
+    remote_src: yes
+    owner: "{{ aur_user }}"
+    group: "{{ aur_user }}"
+    mode: '0644'
+
+- name: Change user shell to zsh 
+  user:
+    name: "{{ aur_user }}"
+    shell: /bin/zsh

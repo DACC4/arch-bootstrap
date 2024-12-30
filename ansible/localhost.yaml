@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+
+  vars:
+    aur_user: cc4
+
+  roles:
+    - base_packages
+    - gnome
+    - zsh
+    - ssh_keygen
+    - docker
+    - snapshots
+    - apps
+    - browsers

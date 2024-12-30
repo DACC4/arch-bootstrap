@@ -1,0 +1,42 @@
+---
+- name: Check updates
+  pacman: 
+   update_cache: yes
+   upgrade: yes
+
+- name: Setup pacman conf
+  replace:
+    path: /etc/pacman.conf
+    regexp: '{{ item.regexp }}'
+    replace: '{{ item.replace }}'
+  with_items:
+    - { regexp: '^#Color$', replace: 'Color' }
+    - { regexp: '^#VerbosePkgLists$', replace: 'VerbosePkgLists' }
+    - regexp: '^#\[multilib\]\n#Include = \/etc\/pacman\.d\/mirrorlist$'
+      replace: |
+        [multilib]
+        Include = /etc/pacman.d/mirrorlist
+
+- name: Install base packages
+  pacman:
+   name:
+    - nano
+    - vi
+    - man-pages
+    - fastfetch
+    - lshw
+    - bind
+    - tmux
+    - tree
+    - jq
+    - gnu-netcat
+    - xclip
+    - powertop
+    - tar
+    - zip
+    - unzip
+    - curl
+    - wget
+    - fwupd
+    - htop
+   state: present

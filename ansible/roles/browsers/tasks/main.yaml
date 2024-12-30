@@ -1,0 +1,12 @@
+---
+- name: Install firefox
+  pacman:
+   name:
+    - firefox
+   state: present
+
+- name: Install chrome
+  aur:
+    name: 
+      - google-chrome
+    user: "{{ aur_user }}"

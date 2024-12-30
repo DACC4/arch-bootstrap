@@ -1,0 +1,94 @@
+---
+- name: Install gnome
+  pacman:
+   name:
+    - gnome
+   state: present
+
+- name: Install gnome plugins
+  aur:
+    name: 
+      - gnome-shell-extension-clipboard-indicator
+    user: "{{ aur_user }}"
+
+- name: Enable gnome clipboard-indicator
+  become_user: "{{ aur_user }}"
+  check_mode: false
+  ansible.builtin.command:
+    cmd: "gnome-extensions enable clipboard-indicator@tudmotu.com"
+
+- name: Enable gnome system-monitor
+  become_user: "{{ aur_user }}"
+  check_mode: false
+  ansible.builtin.command:
+    cmd: "gnome-extensions enable system-monitor@gnome-shell-extensions.gcampax.github.com"
+
+- name: Configure window buttons
+  become_user: "{{ aur_user }}"
+  dconf:
+    key: "/org/gnome/desktop/wm/preferences/button-layout"
+    value: "':minimize,maximize,close'"
+    state: present
+
+- name: Set gnome keyboard
+  become_user: "{{ aur_user }}"
+  dconf:
+    key: "/org/gnome/desktop/input-sources/sources"
+    value: "[('xkb', 'ch+fr')]"
+    state: present
+
+- name: Set gnome theme
+  become_user: "{{ aur_user }}"
+  dconf:
+    key: "/org/gnome/desktop/interface/gtk-theme"
+    value: "'Adwaita'"
+    state: present
+
+- name: Set dark theme
+  become_user: "{{ aur_user }}"
+  dconf:
+    key: "/org/gnome/desktop/interface/color-scheme"
+    value: "'prefer-dark'"
+    state: present
+
+- name: Set primary color
+  become_user: "{{ aur_user }}"
+  dconf:
+    key: "/org/gnome/desktop/screensaver/primary-color"
+    value: "'#241f31'" # Orange
+    state: present
+
+- name: Change keybind to screenshot
+  become_user: "{{ aur_user }}"
+  dconf:
+    key: "/org/gnome/shell/keybindings/show-screenshot-ui"
+    value: "['<Shift><Super>s']"
+    state: present
+
+- name: Enable auto numlock
+  become_user: "{{ aur_user }}"
+  dconf:
+    key: "/org/gnome/desktop/peripherals/keyboard/numlock-state"
+    value: "true"
+    state: present
+
+- name: Set night light
+  become_user: "{{ aur_user }}"
+  dconf:
+    key: "/org/gnome/settings-daemon/plugins/color/night-light-enabled"
+    value: "true"
+    state: present
+
+- name: Set night light time (from)
+  become_user: "{{ aur_user }}"
+  dconf:
+    key: "/org/gnome/settings-daemon/plugins/color/night-light-schedule-from"
+    value: "21.0"
+    state: present
+
+- name: Set night light time (to)
+  become_user: "{{ aur_user }}"
+  dconf:
+    key: "/org/gnome/settings-daemon/plugins/color/night-light-schedule-to"
+    value: "6.0"
+    state: present

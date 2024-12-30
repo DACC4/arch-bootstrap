@@ -1,0 +1,19 @@
+- name: Install apps (pacman)
+  pacman:
+   name:
+    - discord
+    - bitwarden
+    - signal-desktop
+    - telegram-desktop
+    - nextcloud-client
+    - wireguard-tools
+   state: present
+
+- name: Install apps (yay)
+  aur:
+    name: 
+      - cork-rs-bin
+      - code-marketplace
+      - onlyoffice-bin
+      - wireguird
+    user: "{{ aur_user }}"

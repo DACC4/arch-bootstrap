@@ -1,0 +1,19 @@
+---
+- name: Copy grub-btrfsd service file
+  copy:
+    src: grub-btrfsd.service
+    dest: /etc/systemd/system/grub-btrfsd.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Enable grub-btrfsd service
+  systemd_service:
+    name: grub-btrfsd
+    enabled: true
+
+- name: Install timeshift-autosnap
+  aur:
+    name: 
+      - timeshift-autosnap
+    user: "{{ aur_user }}"
