@@ -11,6 +11,7 @@
     - gnome
     - zsh
     - ssh_keygen
+    - git
     - docker
     - snapshots
     - apps

@@ -1,0 +1,14 @@
+---
+- name: Ensure git is installed
+  pacman:
+   name:
+    - git
+   state: present
+
+- name: Copy .gitconfig file
+  template:
+    src: .gitconfig.j2
+    dest: "/home/{{ aur_user }}/.gitconfig"
+    owner: "{{ aur_user }}"
+    group: "{{ aur_user }}"
+    mode: '0644'
