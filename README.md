@@ -72,7 +72,7 @@ ls /usr/share/kbd/keymaps/**/*.map.gz | less
 localectl list-keymaps
 
 # Now get the name without the path and the extension ( localectl returns just the name ) and load the layout. In my case it is simply "fr_CH"
-loadkeys fr_ch
+loadkeys fr_CH
 ```
 
 <br>
@@ -273,7 +273,7 @@ hwclock --systohc
 
 ## Set up the language and tty keyboard map
 
-Edit `/etc/locale.gen` and uncomment the entries for your locales. Each entry represent a language and its formats for time, date, currency and other country related settings. By uncommenting we will mark the entry to be generated when the generate command will be issued, but note that it won't still be active. In my case I will uncomment _\( ie: remove the # \)_ `en_US.UTF-8 UTF-8` and `fr_CH.UTF-8 UTF-8` because I use English as a display language and Italian for date, time and other formats.  
+Edit `/etc/locale.gen` and uncomment the entries for your locales. Each entry represent a language and its formats for time, date, currency and other country related settings. By uncommenting we will mark the entry to be generated when the generate command will be issued, but note that it won't still be active. In my case I will uncomment _\( ie: remove the # \)_ `en_US.UTF-8 UTF-8` and `fr_CH.UTF-8 UTF-8` because I use English as a display language and Swiss French for date, time and other formats.  
 
 ```sh
 # To edit I will use vim, feel free to use nano instead.
@@ -385,7 +385,7 @@ reboot
 # Now you'll be presented at the terminal. Log in with your user account, for me its "cc4".
 
 # Enable and start the time synchronization service
-timedatectl set-ntp true
+sudo timedatectl set-ntp true
 ```
 
 <br>
