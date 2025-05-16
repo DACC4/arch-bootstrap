@@ -5,6 +5,11 @@
     - gnome
    state: present
 
+- name: Start and enable gdm service
+  systemd_service:
+    name: gdm
+    enabled: true
+
 - name: Install gnome plugins
   aur:
     name: 
