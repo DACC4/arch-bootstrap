@@ -39,5 +39,6 @@
     - wget
     - fwupd
     - htop
+    - fprint
    state: present
    update_cache: yes
