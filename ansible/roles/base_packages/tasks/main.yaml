@@ -40,5 +40,6 @@
     - fwupd
     - htop
     - fprint
+    - uv
    state: present
    update_cache: yes
