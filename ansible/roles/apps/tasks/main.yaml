@@ -17,4 +17,5 @@
       - visual-studio-code-bin
       - onlyoffice-bin
       - wireguird
+      - p3x-onenote-bin
     user: "{{ aur_user }}"
