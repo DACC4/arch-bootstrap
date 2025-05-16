@@ -13,7 +13,7 @@
   aur:
     name: 
       - cork-rs-bin
-      - code-marketplace
+      - visual-studio-code-bin
       - onlyoffice-bin
       - wireguird
     user: "{{ aur_user }}"
