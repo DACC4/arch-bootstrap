@@ -22,6 +22,12 @@
   ansible.builtin.command:
     cmd: "gnome-extensions enable clipboard-indicator@tudmotu.com"
 
+- name: Enable gnome status bar
+  become_user: "{{ aur_user }}"
+  check_mode: false
+  ansible.builtin.command:
+    cmd: "gnome-extensions enable status-icons@gnome-shell-extensions.gcampax.github.com"
+
 - name: Enable gnome system-monitor
   become_user: "{{ aur_user }}"
   check_mode: false
