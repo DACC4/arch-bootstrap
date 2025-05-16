@@ -7,6 +7,7 @@
     - telegram-desktop
     - nextcloud-client
     - wireguard-tools
+    - spotify-launcher
    state: present
 
 - name: Install apps (yay)
