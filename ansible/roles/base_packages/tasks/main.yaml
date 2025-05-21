@@ -41,5 +41,7 @@
     - htop
     - fprint
     - uv
+    - exfat-utils
+    - dosfstools
    state: present
    update_cache: yes
