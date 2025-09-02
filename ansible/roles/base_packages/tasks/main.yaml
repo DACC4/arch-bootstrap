@@ -43,5 +43,6 @@
     - uv
     - exfat-utils
     - dosfstools
+    - linux-headers
    state: present
    update_cache: yes
