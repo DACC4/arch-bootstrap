@@ -46,3 +46,13 @@
     - linux-headers
    state: present
    update_cache: yes
+
+- name: Install fonts
+  pacman:
+   name:
+    - noto-fonts
+    - noto-fonts-cjk
+    - noto-fonts-emoji
+    - noto-fonts-extra
+   state: present
+   update_cache: yes
