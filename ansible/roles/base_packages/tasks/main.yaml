@@ -47,6 +47,15 @@
    state: present
    update_cache: yes
 
+- name: Install hunspell
+  pacman:
+   name:
+    - hunspell
+    - hunspell-fr
+    - hunspell-en_gb
+   state: present
+   update_cache: yes
+
 - name: Install fonts
   pacman:
    name:
