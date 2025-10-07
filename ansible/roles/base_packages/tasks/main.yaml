@@ -29,7 +29,8 @@
     - tmux
     - tree
     - jq
-    - gnu-netcat
+    - nmap
+    - whois
     - xclip
     - powertop
     - tar
