@@ -393,7 +393,7 @@ sudo timedatectl set-ntp true
 ## Boostrap
 
 ```sh
-git clone --recurse-submodules https://github.com/DACC4/arch-bootstrap.git && cd arch-bootstrap && chmod +x bootrstrap.sh && ./bootstrap.sh
+git clone --recurse-submodules https://github.com/DACC4/arch-bootstrap.git && cd arch-bootstrap && chmod +x bootstrap.sh && ./bootstrap.sh
 ```
 
 <br>
