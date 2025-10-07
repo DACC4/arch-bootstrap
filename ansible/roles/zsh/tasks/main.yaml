@@ -5,9 +5,15 @@
       - zsh
       - zsh-antidote
       - eza
-      - bat
       - zoxide
     user: "{{ aur_user }}"
+
+- name: Install required apps
+  pacman:
+    name:
+      - bat
+    state: present
+    update_cache: yes
 
 - name: Git checkout .zsh repo
   ansible.builtin.git:
