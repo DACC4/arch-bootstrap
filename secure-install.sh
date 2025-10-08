@@ -126,6 +126,9 @@ arch-chroot "$rootmnt" mkdir -p /efi/EFI/Linux
 arch-chroot "$rootmnt" mkinitcpio -P
 
 # Secure boot
+chattr -i /sys/firmware/efi/efivars/PK*     || true
+chattr -i /sys/firmware/efi/efivars/KEK*    || true
+chattr -i /sys/firmware/efi/efivars/db*     || true
 arch-chroot "$rootmnt" sbctl create-keys
 arch-chroot "$rootmnt" sbctl enroll-keys --microsoft
 arch-chroot "$rootmnt" sbctl sign --save /efi/EFI/Linux/ArchLinux-linux.efi
