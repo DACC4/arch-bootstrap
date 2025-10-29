@@ -1,14 +1,37 @@
-[gpg]
-	format = ssh
-[user]
-	signingkey = /home/{{ aur_user }}/.ssh/id_ed25519.pub
-	name = Christophe - CC4
-	email = 46499354+DACC4@users.noreply.github.com
-[pull]
-	rebase = true
-[core]
-	editor = nano
 [commit]
-	gpgsign = true
+    gpgsign = true
+
+[color]
+    ui = auto
+
+[core]
+    editor = nano
+
+[diff]
+    algorithm = histogram
+    colorMoved = default
+    color-moved-ws = allow-indentation-change
+
 [fetch]
     prune = true
+
+[gpg]
+    format = ssh
+
+[init]
+    defaultBranch = master
+
+[pull]
+    rebase = true
+
+[rebase]
+    autosquash = true
+    autostash = true
+
+[status]
+    showUntrackedFiles = all
+
+[user]
+    email = 46499354+DACC4@users.noreply.github.com
+    name = Christophe - CC4
+    signingkey = /home/{{ aur_user }}/.ssh/id_ed25519.pub
