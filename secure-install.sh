@@ -172,7 +172,7 @@ echo "Enabling services..."
 systemctl --root "$rootmnt" enable systemd-timesyncd NetworkManager
 
 # Prepare ansible code
-arch-chroot "$rootmnt" sudo -u "$username" git clone --recurse-submodules https://github.com/DACC4/arch-bootstrap.git ~/arch-bootstrap
+arch-chroot "$rootmnt" sudo -u "$username" git clone --recurse-submodules https://github.com/DACC4/arch-bootstrap.git "/home/$username/arch-bootstrap"
 
 echo "-----------------------------------"
 echo "- Install complete. Rebooting.... -"
