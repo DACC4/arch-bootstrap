@@ -94,7 +94,7 @@ reflector --country $pacman_country --age 24 --protocol http,https --sort rate -
 pacstrap -K $rootmnt "${pacstrappacs[@]}" 
 
 # Fstab
-genfstab -U "$rootmnt" >> "$rootmnt"/etc/fstab
+genfstab "$rootmnt" >> "$rootmnt"/etc/fstab
 
 # Crypttab
 echo "swap /dev/disk/by-partlabel/cryptswap /dev/urandom swap" > "$rootmnt"/etc/crypttab
@@ -144,7 +144,7 @@ arch-chroot "$rootmnt" efibootmgr --create --disk "$target" --part 1 --label "Ar
 # 7: Secure Boot state (on/off)
 # 8: Kernel command line (so editing the boot list in GRUB won’t allow unlocking with the TPM)
 # 9: Kernel boot state including initrd contents and kernel itself (so system updates could cause TPM failures)
-arch-chroot "$rootmnt" systemd-cryptenroll --wipe-slot tpm2 --tpm2-device=auto --tpm2-pcrs=0+1+4+5+7+8+9 /dev/disk/by-partlabel/cryptsystem
+arch-chroot "$rootmnt" systemd-cryptenroll --wipe-slot tpm2 --tpm2-device=auto --tpm2-pcrs=4+5+7+8 /dev/disk/by-partlabel/cryptsystem
 
 # Locale / Env
 echo "Setting up environment..."
