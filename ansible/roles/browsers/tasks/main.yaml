@@ -1,12 +1,13 @@
 ---
 - name: Install firefox
-  pacman:
+  community.general.pacman:
    name:
     - firefox
    state: present
 
 - name: Install chrome
-  aur:
-    name: 
-      - google-chrome
-    user: "{{ aur_user }}"
+  become_user: "{{ aur_user }}"
+  become: true
+  kewlfft.aur.aur:
+   name:
+    - google-chrome

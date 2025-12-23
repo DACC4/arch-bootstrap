@@ -91,7 +91,7 @@ mount /dev/disk/by-partlabel/EFISYSTEM "$rootmnt"/efi
 # Update pacman mirrors and then pacstrap base install
 echo "Pacstrapping..."
 reflector --country $pacman_country --age 24 --protocol http,https --sort rate --save /etc/pacman.d/mirrorlist
-pacstrap -K $rootmnt "${pacstrappacs[@]}" 
+pacstrap -K $rootmnt "${pacstrappacs[@]}"
 
 # Fstab
 genfstab "$rootmnt" >> "$rootmnt"/etc/fstab
@@ -163,7 +163,7 @@ arch-chroot "$rootmnt" locale-gen
 # Users
 echo "Configuring users..."
 #add the local user
-arch-chroot "$rootmnt" useradd -G wheel -m -p "$user_password" "$username" 
+arch-chroot "$rootmnt" useradd -G wheel -m -p "$user_password" "$username"
 #uncomment the wheel group in the sudoers file
 sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "$rootmnt"/etc/sudoers
 
@@ -181,4 +181,3 @@ sleep 10
 sync
 umount -R "$rootmnt"
 reboot
-

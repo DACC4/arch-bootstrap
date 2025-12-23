@@ -1,44 +1,46 @@
 ---
 - name: Install required apps
-  aur:
-    name: 
+  become_user: "{{ aur_user }}"
+  become: true
+  kewlfft.aur.aur:
+    name:
       - zsh
       - zsh-antidote
       - eza
       - zoxide
-    user: "{{ aur_user }}"
 
 - name: Install required apps
-  pacman:
+  community.general.pacman:
     name:
       - bat
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Git checkout .zsh repo
   ansible.builtin.git:
     repo: 'https://github.com/DACC4/.zsh.git'
     dest: "/home/{{ aur_user }}/.arch-bootstrap/.zsh"
+    version: main
 
 - name: Copy .zshrc file
-  copy:
+  ansible.builtin.copy:
     src: "/home/{{ aur_user }}/.arch-bootstrap/.zsh/.zshrc"
     dest: "/home/{{ aur_user }}/.zshrc"
-    remote_src: yes
+    remote_src: true
     owner: "{{ aur_user }}"
     group: "{{ aur_user }}"
     mode: '0644'
 
 - name: Copy .zsh_plugins.txt file
-  copy:
+  ansible.builtin.copy:
     src: "/home/{{ aur_user }}/.arch-bootstrap/.zsh/.zsh_plugins.txt"
     dest: "/home/{{ aur_user }}/.zsh_plugins.txt"
-    remote_src: yes
+    remote_src: true
     owner: "{{ aur_user }}"
     group: "{{ aur_user }}"
     mode: '0644'
 
-- name: Change user shell to zsh 
-  user:
+- name: Change user shell to zsh
+  ansible.builtin.user:
     name: "{{ aur_user }}"
     shell: /bin/zsh

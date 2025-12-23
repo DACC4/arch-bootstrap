@@ -1,0 +1,52 @@
+---
+#
+# To see all possible file types: https://github.com/pre-commit/identify/blob/main/identify/extensions.py
+#
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    # avoid incoherences in line endings
+    rev: v5.0.0
+    hooks:
+      - id: check-symlinks
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: local
+    hooks:
+      - id: yamllint
+        name: yamllint
+        types: [yaml]
+        language: system
+        entry: uv run python3 -m yamllint
+        # check the syntax of YAML files
+        args: [--strict, -d, "./.yamllint", -f, parsable]
+
+      - id: ansible-lint
+        name: ansible-lint
+        files: "ansible/.*"
+        language: system
+        args:
+          [
+            --force-color,
+            --offline,
+            -w,
+            '""',
+            "-c",
+            "./.ansible-lint"
+          ]
+        entry: uv run python3 -m ansiblelint
+        pass_filenames: false
+
+      - id: playbook-syntax-check
+        name: playbook-syntax-check
+        files: "ansible/.*"
+        language: system
+        entry: uv run ansible-playbook
+        # check the syntax of YAML files. Here we only test one of the inventories.
+        # Therefore, it means that other inventories may not work 🤷
+        args:
+          [
+            --syntax-check,
+            ansible/localhost.yaml
+          ]
+        pass_filenames: false

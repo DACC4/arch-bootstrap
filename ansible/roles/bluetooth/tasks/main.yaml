@@ -1,12 +1,12 @@
 ---
 - name: Install required packages
-  pacman:
+  community.general.pacman:
    name:
     - bluez
    state: present
 
 - name: Start and enable bluetooth service
-  systemd_service:
-    name: bluetooth
-    enabled: true
-    state: started
+  ansible.builtin.systemd_service:
+   name: bluetooth
+   enabled: true
+   state: started

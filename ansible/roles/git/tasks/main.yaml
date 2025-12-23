@@ -1,15 +1,15 @@
 ---
 - name: Ensure git is installed
-  pacman:
+  community.general.pacman:
    name:
     - git
     - git-absorb
    state: present
 
 - name: Copy .gitconfig file
-  template:
-    src: .gitconfig.j2
-    dest: "/home/{{ aur_user }}/.gitconfig"
-    owner: "{{ aur_user }}"
-    group: "{{ aur_user }}"
-    mode: '0644'
+  ansible.builtin.template:
+   src: .gitconfig.j2
+   dest: "/home/{{ aur_user }}/.gitconfig"
+   owner: "{{ aur_user }}"
+   group: "{{ aur_user }}"
+   mode: '0644'

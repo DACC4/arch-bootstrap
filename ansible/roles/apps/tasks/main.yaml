@@ -1,5 +1,6 @@
+---
 - name: Install apps (pacman)
-  pacman:
+  community.general.pacman:
    name:
     - discord
     - bitwarden
@@ -13,11 +14,12 @@
    state: present
 
 - name: Install apps (yay)
-  aur:
-    name: 
-      - cork-rs-bin
+  become_user: "{{ aur_user }}"
+  become: true
+  kewlfft.aur.aur:
+   name:
+    - cork-rs-bin
       - visual-studio-code-bin
       - onlyoffice-bin
       - wireguird
       - p3x-onenote-bin
-    user: "{{ aur_user }}"

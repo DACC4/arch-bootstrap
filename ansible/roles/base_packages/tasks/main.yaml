@@ -1,24 +1,23 @@
 ---
 - name: Check updates
-  pacman: 
-   update_cache: yes
-   upgrade: yes
+  community.general.pacman:
+   update_cache: true
+   upgrade: true
 
 - name: Setup pacman conf
-  replace:
-    path: /etc/pacman.conf
-    regexp: '{{ item.regexp }}'
-    replace: '{{ item.replace }}'
+  ansible.builtin.replace:
+   path: /etc/pacman.conf
+   regexp: '{{ item.regexp }}'
+   replace: '{{ item.replace }}'
   with_items:
-    - { regexp: '^#Color$', replace: 'Color' }
-    - { regexp: '^#VerbosePkgLists$', replace: 'VerbosePkgLists' }
-    - regexp: '^#\[multilib\]\n#Include = \/etc\/pacman\.d\/mirrorlist$'
-      replace: |
-        [multilib]
-        Include = /etc/pacman.d/mirrorlist
-
+   - { regexp: '^#Color$', replace: 'Color' }
+   - { regexp: '^#VerbosePkgLists$', replace: 'VerbosePkgLists' }
+   - regexp: '^#\[multilib\]\n#Include = \/etc\/pacman\.d\/mirrorlist$'
+     replace: |
+       [multilib]
+       Include = /etc/pacman.d/mirrorlist
 - name: Install base packages
-  pacman:
+  community.general.pacman:
    name:
     - nano
     - vi
@@ -50,23 +49,23 @@
     - cups
     - traceroute
    state: present
-   update_cache: yes
+   update_cache: true
 
 - name: Install hunspell
-  pacman:
+  community.general.pacman:
    name:
     - hunspell
     - hunspell-fr
     - hunspell-en_gb
    state: present
-   update_cache: yes
+   update_cache: true
 
 - name: Install fonts
-  pacman:
+  community.general.pacman:
    name:
     - noto-fonts
     - noto-fonts-cjk
     - noto-fonts-emoji
     - noto-fonts-extra
    state: present
-   update_cache: yes
+   update_cache: true

@@ -1,0 +1,6 @@
+---
+skip_list:
+  - yaml  # Violations reported by yamllint, we already yamlint
+  - meta-no-info  # We don't care about missing galaxy info
+  - ignore-errors  # We want to be able to ignore all errors for some tasks
+  - package-latest  # Package installs should not use latest

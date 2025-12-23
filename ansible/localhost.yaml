@@ -1,10 +1,11 @@
 ---
-- hosts: localhost
+- name: Configure and install system
+  hosts: localhost
   connection: local
   become: true
 
   vars:
-    aur_user: christophe
+    aur_user: "{{ lookup('env', 'USER') }}"
 
   roles:
     - base_packages

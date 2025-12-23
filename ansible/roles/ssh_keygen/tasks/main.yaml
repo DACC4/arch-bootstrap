@@ -1,6 +1,6 @@
 ---
 - name: Create .ssh dir if needed
-  file:
+  ansible.builtin.file:
     path: "/home/{{ aur_user }}/.ssh"
     owner: "{{ aur_user }}"
     group: "{{ aur_user }}"
@@ -8,7 +8,7 @@
     state: directory
 
 - name: Ensure ssh keypair exists
-  openssh_keypair:
+  community.crypto.openssh_keypair:
     path: "/home/{{ aur_user }}/.ssh/id_ed25519"
     type: ed25519
     owner: "{{ aur_user }}"

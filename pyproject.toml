@@ -1,0 +1,10 @@
+[project]
+name = "arch-bootstrap"
+version = "1.0.0"
+requires-python = ">=3.12"
+dependencies = [
+    "ansible>=11.1.0",
+    "ansible-lint>=25.4.0",
+    "pre-commit>=4.2.0",
+    "yamllint>=1.37.1",
+]

@@ -41,9 +41,9 @@ The main inspiration and source for this guide can be found [here](https://gist.
 
 # Introduction
 
-The goal of this guide is to help new users set up a modern and minimal installation of **Arch Linux** with **BTRFS** on an **UEFI system**. I'll start from the basic terminal installation and then set up **video drivers and a desktop environment**. 
+The goal of this guide is to help new users set up a modern and minimal installation of **Arch Linux** with **BTRFS** on an **UEFI system**. I'll start from the basic terminal installation and then set up **video drivers and a desktop environment**.
 
-Then using ansible, we'll setup the system to the 
+Then using ansible, we'll setup the system to the
 
 ### Note that:
 
@@ -57,9 +57,9 @@ Then using ansible, we'll setup the system to the
 
 <br>
 
-# Preliminary steps  
+# Preliminary steps
 
-First set up your keyboard layout  
+First set up your keyboard layout
 
 ```sh
 # List all the available keyboard maps and filter them through grep, in this case i am looking for an Swiss French keyboard, which usually starts with "fr_CH", for english filter with "en"
@@ -77,7 +77,7 @@ loadkeys fr_CH
 
 <br>
 
-Check that we are in UEFI mode  
+Check that we are in UEFI mode
 
 ```sh
 # If this command prints 64 or 32 then you are in UEFI
@@ -86,7 +86,7 @@ cat /sys/firmware/efi/fw_platform_size
 
 <br>
 
-Check the internet connection  
+Check the internet connection
 
 ```sh
 ping -c 5 archlinux.org
@@ -113,12 +113,12 @@ systemctl enable systemd-timesyncd.service
 
 ## Disk partitioning
 
-I will make 2 partitions:  
+I will make 2 partitions:
 
 | Number | Type | Size |
 | --- | --- | --- |
 | 1 | EFI | 512 Mb |
-| 2 | Linux Filesystem | 99.5Gb \(all of the remaining space \) |  
+| 2 | Linux Filesystem | 99.5Gb \(all of the remaining space \) |
 
 <br>
 
@@ -167,7 +167,7 @@ ENTER
 
 <br>
 
-## Disk formatting  
+## Disk formatting
 
 For the file system I've chosen [**BTRFS**](https://wiki.archlinux.org/title/Btrfs) which has evolved quite a lot in the recent years. It is most known for its **Copy on Write** feature which enables it to make system snapshots in a blink of a an eye and to save a lot of disk space, which can be even saved to a greater extent by enabling built\-in **compression**. Also it lets the user create **subvolumes** which can be individually snapshotted.
 
@@ -210,7 +210,7 @@ mount /dev/nvme0n1p1 /mnt/efi
 
 <br>
 
-## Packages installation  
+## Packages installation
 
 ```sh
 # This will install some packages to "bootstrap" methaphorically our system. Feel free to add the ones you want
@@ -226,7 +226,7 @@ mount /dev/nvme0n1p1 /mnt/efi
 # "amd-ucode" microcode updates for the cpu. If you have an intel one use "intel-ucode"
 # "vim" my goto editor, if unfamiliar use nano
 # "networkmanager" to manage Internet connections both wired and wireless ( it also has an applet package network-manager-applet )
-# "pipewire pipewire-alsa pipewire-pulse pipewire-jack" for the new audio framework replacing pulse and jack. 
+# "pipewire pipewire-alsa pipewire-pulse pipewire-jack" for the new audio framework replacing pulse and jack.
 # "wireplumber" the pipewire session manager.
 # "reflector" to manage mirrors for pacman
 # "zsh" my favourite shell
@@ -238,7 +238,7 @@ pacstrap -K /mnt base base-devel linux linux-firmware git btrfs-progs grub efibo
 
 <br>
 
-## Fstab  
+## Fstab
 
 ```sh
 # Fetch the disk mounting points as they are now ( we mounted everything before ) and generate instructions to let the system know how to mount the various disks automatically
@@ -250,7 +250,7 @@ cat /mnt/etc/fstab
 
 <br>
 
-## Context switch to our new system  
+## Context switch to our new system
 
 ```sh
 # To access our new system we chroot into it
@@ -273,7 +273,7 @@ hwclock --systohc
 
 ## Set up the language and tty keyboard map
 
-Edit `/etc/locale.gen` and uncomment the entries for your locales. Each entry represent a language and its formats for time, date, currency and other country related settings. By uncommenting we will mark the entry to be generated when the generate command will be issued, but note that it won't still be active. In my case I will uncomment _\( ie: remove the # \)_ `en_US.UTF-8 UTF-8` and `fr_CH.UTF-8 UTF-8` because I use English as a display language and Swiss French for date, time and other formats.  
+Edit `/etc/locale.gen` and uncomment the entries for your locales. Each entry represent a language and its formats for time, date, currency and other country related settings. By uncommenting we will mark the entry to be generated when the generate command will be issued, but note that it won't still be active. In my case I will uncomment _\( ie: remove the # \)_ `en_US.UTF-8 UTF-8` and `fr_CH.UTF-8 UTF-8` because I use English as a display language and Swiss French for date, time and other formats.
 
 ```sh
 # To edit I will use vim, feel free to use nano instead.
@@ -328,7 +328,7 @@ vim /etc/hosts
 
 <br>
 
-## Root and users  
+## Root and users
 
 ```sh
 # Add a new user, in my case cc4.
@@ -341,7 +341,7 @@ passwd cc4
 # You can choose a different editor than vim by changing the EDITOR variable
 # Once opened, you have to look for a line which says something like "Uncomment to let members of group wheel execute any action"
 # and uncomment exactly the line BELOW it, by removing the #. This will grant superuser priviledges to your user.
-# Why are we issuing this command instead of a simple vim /etc/sudoers ? 
+# Why are we issuing this command instead of a simple vim /etc/sudoers ?
 # Because visudo does more than opening the editor, for example it locks the file from being edited simultaneously and
 # runs syntax checks to avoid committing an unreadable file.
 EDITOR=vim visudo
@@ -349,17 +349,17 @@ EDITOR=vim visudo
 
 <br>
 
-## Grub configuration  
+## Grub configuration
 
-Now I'll [deploy grub](https://wiki.archlinux.org/title/GRUB#Installation)  
+Now I'll [deploy grub](https://wiki.archlinux.org/title/GRUB#Installation)
 
 ```sh
-grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB  
+grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
 ```
 
 <br>
 
-Generate the grub configuration ( it will include the microcode installed with pacstrap earlier )  
+Generate the grub configuration ( it will include the microcode installed with pacstrap earlier )
 
 ```sh
 grub-mkconfig -o /boot/grub/grub.cfg
@@ -367,7 +367,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 <br>
 
-## Unmount everything and reboot 
+## Unmount everything and reboot
 
 ```sh
 # Enable newtork manager before rebooting otherwise, you won't be able to connect
@@ -405,19 +405,19 @@ git clone --recurse-submodules https://github.com/DACC4/arch-bootstrap.git && cd
 reboot
 ```
 
-After these steps you **should** be able to boot on your newly installed Arch Linux, if so congrats !  
+After these steps you **should** be able to boot on your newly installed Arch Linux, if so congrats !
 
 <br>
 
 # Video drivers
 
-In order to have the smoothest experience on a graphical environment, **Gaming included**, we first need to install video drivers. To help you choose which one you want or need, read [this section](https://wiki.archlinux.org/title/Xorg#Driver_installation) of the arch wiki.  
+In order to have the smoothest experience on a graphical environment, **Gaming included**, we first need to install video drivers. To help you choose which one you want or need, read [this section](https://wiki.archlinux.org/title/Xorg#Driver_installation) of the arch wiki.
 
 <br>
 
-## Amd  
+## Amd
 
-For this guide I'll install the [**AMDGPU** driver](https://wiki.archlinux.org/title/AMDGPU) which is the open source one and the recommended, but be aware that this works starting from the **GCN 3** architecture, which means that cards **before** RX 400 series are not supported. _\( I have an RX 5700 XT \)_  
+For this guide I'll install the [**AMDGPU** driver](https://wiki.archlinux.org/title/AMDGPU) which is the open source one and the recommended, but be aware that this works starting from the **GCN 3** architecture, which means that cards **before** RX 400 series are not supported. _\( I have an RX 5700 XT \)_
 
 ```sh
 
@@ -445,9 +445,9 @@ sudo pacman -S lib32-mesa lib32-vulkan-radeon lib32-libva-mesa-driver lib32-mesa
 
 <br>
 
-## Nvidia  
+## Nvidia
 
-In summary if you have an Nvidia card you have 2 options:  
+In summary if you have an Nvidia card you have 2 options:
 
 1. [**NVIDIA** proprietary driver](https://wiki.archlinux.org/title/NVIDIA)
 2. [**Nouveau** open source driver](https://wiki.archlinux.org/title/Nouveau)
@@ -464,15 +464,15 @@ Installation looks almost identical to the AMD one, but every time a package con
 
 # Gaming
 
-Gaming on linux has become a very fluid experience, so I'll give some tips on how to setup your arch distro for gaming.  
+Gaming on linux has become a very fluid experience, so I'll give some tips on how to setup your arch distro for gaming.
 Before going further I'll assume that you have installed the video drivers, also make sure to install with pacman, if you haven't done it already: `lib32-mesa`, `lib32-vulkan-radeon` and additionally `lib32-pipewire` \( Note that the `multilib` repository must be enabled, [here](#32-bit-support) I've explained how to do it ).
 
-Let's break down what is needed to game:  
+Let's break down what is needed to game:
 
 1. **Gaming client** ( eg: Steam, Lutris, Bottles, etc..)
 2. **Windows compatibility layers** ( eg: Proton, Wine, DXVK, VKD3D )
 
-Optionally we can have:  
+Optionally we can have:
 
 1. **Generic optimization** ( eg: gamemode )
 2. **Overclocking and monitoring software** ( eg: CoreCtrl, Mangohud )
@@ -480,7 +480,7 @@ Optionally we can have:
 
 <br>
 
-## Gaming clients  
+## Gaming clients
 
 I'll install **Steam** and to access games from other launchers I'll use **Bottles**, which should be installed through **flatpak**.
 
@@ -496,7 +496,7 @@ flatpak install flathub com.usebottles.bottles
 
 ## Windows compatibility layers
 
-Proton is the compatibility layer developed by Valve, which includes **DXVK**( DirectX 9-10-11 to Vulkan), **VKD3D** ( DirectX 12 to Vulkan ) and a custom version of **Wine**. It is embedded in Steam and can be enabled for **non** native games direclty in Steam: `Steam > Settings > Compatibility > Enable Steam Play for all other titles`. A custom version of proton, **Proton GE** exists and can be used as an alternative if something is broken or doesn't perform as expected. Can be either [downloaded manually](https://github.com/GloriousEggroll/proton-ge-custom#installation) or through yay as below.  
+Proton is the compatibility layer developed by Valve, which includes **DXVK**( DirectX 9-10-11 to Vulkan), **VKD3D** ( DirectX 12 to Vulkan ) and a custom version of **Wine**. It is embedded in Steam and can be enabled for **non** native games direclty in Steam: `Steam > Settings > Compatibility > Enable Steam Play for all other titles`. A custom version of proton, **Proton GE** exists and can be used as an alternative if something is broken or doesn't perform as expected. Can be either [downloaded manually](https://github.com/GloriousEggroll/proton-ge-custom#installation) or through yay as below.
 
 ```sh
 # Installation through yay

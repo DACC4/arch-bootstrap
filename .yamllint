@@ -1,0 +1,22 @@
+---
+extends: default
+
+ignore: |
+  .venv
+
+rules:
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: true
+  empty-values:
+    forbid-in-block-mappings: false
+    forbid-in-flow-mappings: true
+    forbid-in-block-sequences: true
+  float-values: enable
+  line-length:
+    max: 120
+  braces:
+    max-spaces-inside: 1
+  comments:
+    min-spaces-from-content: 1
+  comments-indentation: false

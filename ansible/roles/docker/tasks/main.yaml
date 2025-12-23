@@ -1,6 +1,6 @@
 ---
 - name: Install docker
-  pacman:
+  community.general.pacman:
    name:
     - docker
     - docker-compose
@@ -8,13 +8,13 @@
    state: present
 
 - name: Start and enable docker service
-  systemd_service:
-    name: docker
-    enabled: true
-    state: started
+  ansible.builtin.systemd_service:
+   name: docker
+   enabled: true
+   state: started
 
 - name: Add user to docker group
-  user:
-    name: "{{ aur_user }}"
-    append: true
-    groups: docker
+  ansible.builtin.user:
+   name: "{{ aur_user }}"
+   append: true
+   groups: docker

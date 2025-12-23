@@ -1,67 +1,53 @@
 ---
 - name: Install gnome
-  pacman:
+  community.general.pacman:
    name:
     - gnome
    state: present
 
 - name: Start and enable gdm service
-  systemd_service:
-    name: gdm
-    enabled: true
+  ansible.builtin.systemd_service:
+   name: gdm
+   enabled: true
 
 - name: Install gnome plugins
-  aur:
-    name: 
-      - gnome-shell-extension-clipboard-indicator
-    user: "{{ aur_user }}"
+  become_user: "{{ aur_user }}"
+  become: true
+  kewlfft.aur.aur:
+   name:
+    - gnome-shell-extension-clipboard-indicator
 
 - name: Enable gnome clipboard-indicator
   become_user: "{{ aur_user }}"
+  become: true
   check_mode: false
   ansible.builtin.command:
-    cmd: "gnome-extensions enable clipboard-indicator@tudmotu.com"
+   cmd: "gnome-extensions enable clipboard-indicator@tudmotu.com"
+  changed_when: false
 
 - name: Enable gnome status bar
   become_user: "{{ aur_user }}"
+  become: true
   check_mode: false
   ansible.builtin.command:
-    cmd: "gnome-extensions enable status-icons@gnome-shell-extensions.gcampax.github.com"
+   cmd: "gnome-extensions enable status-icons@gnome-shell-extensions.gcampax.github.com"
+  changed_when: false
 
 - name: Enable gnome system-monitor
   become_user: "{{ aur_user }}"
+  become: true
   check_mode: false
   ansible.builtin.command:
-    cmd: "gnome-extensions enable system-monitor@gnome-shell-extensions.gcampax.github.com"
+   cmd: "gnome-extensions enable system-monitor@gnome-shell-extensions.gcampax.github.com"
+  changed_when: false
 
 - name: Configure gnome dconf settings
   become_user: "{{ aur_user }}"
-  dconf:
-    key: "{{ item.key }}"
-    value: "{{ item.value }}"
-    state: "present"
-  loop:
-    - { key: "/org/gnome/desktop/wm/preferences/button-layout", value: "':minimize,maximize,close'"}
-    - { key: "/org/gnome/desktop/input-sources/sources", value: "[('xkb', 'ch+fr')]"}
-    - { key: "/org/gnome/desktop/interface/gtk-theme", value: "'Adwaita'"}
-    - { key: "/org/gnome/desktop/interface/color-scheme", value: "'prefer-dark'"}
-    - { key: "/org/gnome/desktop/screensaver/picture-uri", value: "'file:///usr/share/backgrounds/gnome/blobs-l.svg'"}
-    - { key: "/org/gnome/desktop/interface/accent-color", value: "'orange'"}
-    - { key: "/org/gnome/desktop/calendar/show-weekdate", value: "true"}
-    - { key: "/org/gnome/shell/favorite-apps", value: "['firefox.desktop', 'google-chrome.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Console.desktop', 'signal-desktop.desktop', 'spotify-launcher.desktop', 'bitwarden.desktop', 'code.desktop']"}
-    - { key: "/org/gnome/shell/keybindings/show-screenshot-ui", value: "['<Shift><Super>s']"}
-    - { key: "/org/gnome/desktop/peripherals/keyboard/numlock-state", value: "true"}
-    - { key: "/org/gnome/settings-daemon/plugins/color/night-light-enabled", value: "true"}
-    - { key: "/org/gnome/settings-daemon/plugins/color/night-light-schedule-from", value: "21.0"}
-    - { key: "/org/gnome/settings-daemon/plugins/color/night-light-schedule-to", value: "6.0"}
-    - { key: "/org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-timeout", value: "1800"}
-    - { key: "/org/gnome/settings-daemon/plugins/power/ambient-enabled", value: "true"}
-    - { key: "/org/gnome/settings-daemon/plugins/power/idle-brightness", value: "30"}
-    - { key: "/org/gnome/settings-daemon/plugins/power/idle-dim", value: "true"}
-    - { key: "/org/gnome/settings-daemon/plugins/power/power-button-action", value: "'suspend'"}
-    - { key: "/org/gnome/settings-daemon/plugins/power/power-saver-profile-on-low-battery", value: "true"}
-    - { key: "/org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-type", value: "'suspend'"}
-    - { key: "/org/gnome/settings-daemon/plugins/power/sleep-inactive-battery-timeout", value: "900"}
-    - { key: "/org/gnome/settings-daemon/plugins/power/sleep-inactive-battery-type", value: "'suspend'"}
+  become: true
+  community.general.dconf:
+   key: "{{ item.key }}"
+   value: "{{ item.value }}"
+   state: "present"
+  loop: "{{ gnome_dconf_settings }}"
   loop_control:
-    label: "{{ item.key }}"
+   label: "{{ item.key }}"
