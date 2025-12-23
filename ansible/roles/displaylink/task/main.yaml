@@ -1,0 +1,15 @@
+---
+- name: Install displaylink packages
+  become_user: "{{ aur_user }}"
+  become: true
+  kewlfft.aur.aur:
+   name:
+    - evdi-dkms
+    - displaylink
+   state: present
+
+- name: Start and enable displaylink service
+  ansible.builtin.systemd_service:
+   name: displaylink
+   enabled: true
+   state: started

@@ -13,6 +13,7 @@
     - zsh
     - ssh_keygen
     - bluetooth
+    - displaylink
     - git
     - docker
     - apps
