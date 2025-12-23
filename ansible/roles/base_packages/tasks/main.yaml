@@ -29,6 +29,7 @@
     - tmux
     - tree
     - jq
+    - yq
     - nmap
     - whois
     - xclip
@@ -45,6 +46,9 @@
     - exfat-utils
     - dosfstools
     - linux-headers
+    - arch-wiki-docs
+    - cups
+    - traceroute
    state: present
    update_cache: yes
 

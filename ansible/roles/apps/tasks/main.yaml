@@ -8,6 +8,8 @@
     - nextcloud-client
     - wireguard-tools
     - spotify-launcher
+    - drawio-desktop
+    - tailscale
    state: present
 
 - name: Install apps (yay)
