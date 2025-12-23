@@ -20,7 +20,7 @@
   ansible.builtin.git:
     repo: 'https://github.com/DACC4/.zsh.git'
     dest: "/home/{{ aur_user }}/.arch-bootstrap/.zsh"
-    version: main
+    version: master
 
 - name: Copy .zshrc file
   ansible.builtin.copy:
