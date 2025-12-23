@@ -10,7 +10,13 @@
    name: gdm
    enabled: true
 
-- name: Install gnome plugins
+- name: Install gnome default extensions
+  community.general.pacman:
+   name:
+    - gnome-shell-extensions
+   state: present
+
+- name: Install gnome clipboard-indicator extension
   become_user: "{{ aur_user }}"
   become: true
   kewlfft.aur.aur:
@@ -26,16 +32,12 @@
   changed_when: false
 
 - name: Enable gnome status bar
-  become_user: "{{ aur_user }}"
-  become: true
   check_mode: false
   ansible.builtin.command:
    cmd: "gnome-extensions enable status-icons@gnome-shell-extensions.gcampax.github.com"
   changed_when: false
 
 - name: Enable gnome system-monitor
-  become_user: "{{ aur_user }}"
-  become: true
   check_mode: false
   ansible.builtin.command:
    cmd: "gnome-extensions enable system-monitor@gnome-shell-extensions.gcampax.github.com"
