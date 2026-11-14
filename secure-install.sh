@@ -137,14 +137,27 @@ arch-chroot "$rootmnt" efibootmgr --create --disk "$target" --part 1 --label "Ar
 arch-chroot "$rootmnt" efibootmgr --create --disk "$target" --part 1 --label "ArchLinux-linux" --loader 'EFI\Linux\ArchLinux-linux.efi' --unicode
 
 # TPM2
-# 0: System firmware executable code (so fwupd could cause TPM failures)
-# 1: System configuration
-# 4: Firmware boot order (so booting an external disk won’t allow unlocking with the TPM)
-# 5: Boot configuration, including GPT
-# 7: Secure Boot state (on/off)
-# 8: Kernel command line (so editing the boot list in GRUB won’t allow unlocking with the TPM)
-# 9: Kernel boot state including initrd contents and kernel itself (so system updates could cause TPM failures)
-arch-chroot "$rootmnt" systemd-cryptenroll --wipe-slot tpm2 --tpm2-device=auto --tpm2-pcrs=4+5+7+8 /dev/disk/by-partlabel/cryptsystem
+# Generate the keys for TPM2 PCR signing
+arch-chroot "$rootmnt" ukify genkey \
+    --pcr-private-key=/etc/systemd/tpm2-pcr-private-key.pem \
+    --pcr-public-key=/etc/systemd/tpm2-pcr-public-key.pem
+arch-chroot "$rootmnt" ukify genkey \
+    --pcr-private-key=/etc/systemd/tpm2-pcr-private-key-initrd.pem \
+    --pcr-public-key=/etc/systemd/tpm2-pcr-public-key-initrd.pem
+# Create the configuration file for the UKI
+cat > "$rootmnt"/etc/kernel/uki.conf << EOF
+[PCRSignature:all]
+PCRPrivateKey=/etc/systemd/tpm2-pcr-private-key.pem
+PCRPublicKey=/etc/systemd/tpm2-pcr-public-key.pem
+
+[PCRSignature:initrd]
+Phases=enter-initrd
+PCRPrivateKey=/etc/systemd/tpm2-pcr-private-key-initrd.pem
+PCRPublicKey=/etc/systemd/tpm2-pcr-public-key-initrd.pem
+EOF
+# Enroll the TPM2 key for disk unlocking and regenerate the initramfs with the new configuration
+arch-chroot "$rootmnt" systemd-cryptenroll --wipe-slot tpm2 --tpm2-device=auto --tpm2-public-key /etc/systemd/tpm2-pcr-public-key-initrd.pem /dev/disk/by-partlabel/cryptsystem
+arch-chroot "$rootmnt" mkinitcpio -P
 
 # Locale / Env
 echo "Setting up environment..."
