@@ -1,0 +1,5 @@
+---
+- name: Restart gazed
+  ansible.builtin.systemd_service:
+   name: gazed
+   state: restarted
