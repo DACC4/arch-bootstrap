@@ -1,0 +1,8 @@
+---
+# Settings that differ from the package defaults, applied with `gaze config set`.
+gaze_settings:
+  storage.unlock_gnome_keyring: true
+
+# IR camera source (a /dev/video* node or a GStreamer source string).
+# Leave empty to auto-detect it (only when cameras.ir is not already set).
+gaze_ir_camera: ""

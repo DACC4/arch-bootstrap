@@ -10,6 +10,7 @@
   roles:
     - base_packages
     - gnome
+    - gaze
     - zsh
     - ssh_keygen
     - bluetooth

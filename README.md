@@ -42,7 +42,17 @@ cd ~/arch-bootstrap   # cloned automatically by secure-install.sh, otherwise clo
 
 `bootstrap.sh` installs `uv` and `yay`, sets up Ansible, then runs `ansible/localhost.yaml`.
 
-The playbook applies these roles: base packages, GNOME settings, zsh, SSH key, Bluetooth, DisplayLink, git, Docker, apps and browsers. Add or remove roles in `ansible/localhost.yaml`.
+The playbook applies these roles: base packages, GNOME settings, Gaze (face unlock), zsh, SSH key, Bluetooth, DisplayLink, git, Docker, apps and browsers. Add or remove roles in `ansible/localhost.yaml`.
+
+### Gaze (face unlock)
+
+The `gaze` role installs Gaze and its GNOME extension, enables `gazed`, turns on GNOME keyring unlock and auto-detects the IR camera (override with `gaze_ir_camera`). The RGB camera stays on the package default (`primary`). Enrollment is TPM-bound and manual, so after the playbook run:
+
+```sh
+sudo gaze add-face
+sudo gaze keyring   # enroll the GNOME keyring password
+gaze doctor
+```
 
 ## Development
 
