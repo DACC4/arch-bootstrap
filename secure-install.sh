@@ -17,9 +17,10 @@ pacman_country="CH"
 timezone="Europe/Zurich"
 hostname="arch"
 username="christophe"
-#SHA512 hash of password. To generate, run 'mkpasswd -m sha-512', don't forget to prefix any $ symbols with \ . The entry below is the hash of 'password'
-user_password="\$6\$/VBa6GuBiFiBmi6Q\$yNALrCViVtDDNjyGBsDG7IbnNR0Y/Tda5Uz8ToyxXXpw86XuCVAlhXlIvzy1M8O.DWFB6TRCia0hMuAJiXOZy/"
-crypt_password="password"
+#SHA512 hash of password, normally provided by setup.sh through USER_PASSWORD_HASH. To generate one, run 'openssl passwd -6'. The fallback below is the hash of 'password'
+user_password="${USER_PASSWORD_HASH:-\$6\$/VBa6GuBiFiBmi6Q\$yNALrCViVtDDNjyGBsDG7IbnNR0Y/Tda5Uz8ToyxXXpw86XuCVAlhXlIvzy1M8O.DWFB6TRCia0hMuAJiXOZy/}"
+# Disk encryption passphrase, normally provided by setup.sh through CRYPT_PASSWORD
+crypt_password="${CRYPT_PASSWORD:-password}"
 
 ### Packages to pacstrap ##
 pacstrappacs=(
@@ -62,8 +63,10 @@ partprobe -s "$target"
 sleep 2
 
 # Setup luks partitions
+set +x # don't leak the passphrase in the trace
 echo -n "$crypt_password" | cryptsetup luksFormat --type luks2 --batch-mode /dev/disk/by-partlabel/cryptsystem -
 echo -n "$crypt_password" | cryptsetup open --batch-mode /dev/disk/by-partlabel/cryptsystem system -
+set -x
 # swap
 cryptsetup open --batch-mode --type plain --key-file /dev/urandom /dev/disk/by-partlabel/cryptswap swap
 mkswap -L swap /dev/mapper/swap
@@ -156,7 +159,10 @@ PCRPrivateKey=/etc/systemd/tpm2-pcr-private-key-initrd.pem
 PCRPublicKey=/etc/systemd/tpm2-pcr-public-key-initrd.pem
 EOF
 # Enroll the TPM2 key for disk unlocking and regenerate the initramfs with the new configuration
-arch-chroot "$rootmnt" systemd-cryptenroll --wipe-slot tpm2 --tpm2-device=auto --tpm2-public-key /etc/systemd/tpm2-pcr-public-key-initrd.pem /dev/disk/by-partlabel/cryptsystem
+set +x # don't leak the passphrase in the trace
+# PASSWORD lets systemd-cryptenroll unlock the existing keyslot without prompting
+arch-chroot "$rootmnt" env PASSWORD="$crypt_password" systemd-cryptenroll --wipe-slot tpm2 --tpm2-device=auto --tpm2-public-key /etc/systemd/tpm2-pcr-public-key-initrd.pem /dev/disk/by-partlabel/cryptsystem
+set -x
 arch-chroot "$rootmnt" mkinitcpio -P
 
 # Locale / Env

@@ -17,8 +17,8 @@ pacman_country="CH"
 timezone="Europe/Zurich"
 hostname="arch"
 username="christophe"
-#SHA512 hash of password. To generate, run 'mkpasswd -m sha-512', don't forget to prefix any $ symbols with \ . The entry below is the hash of 'password'
-user_password="\$6\$/VBa6GuBiFiBmi6Q\$yNALrCViVtDDNjyGBsDG7IbnNR0Y/Tda5Uz8ToyxXXpw86XuCVAlhXlIvzy1M8O.DWFB6TRCia0hMuAJiXOZy/"
+#SHA512 hash of password, normally provided by setup.sh through USER_PASSWORD_HASH. To generate one, run 'openssl passwd -6'. The fallback below is the hash of 'password'
+user_password="${USER_PASSWORD_HASH:-\$6\$/VBa6GuBiFiBmi6Q\$yNALrCViVtDDNjyGBsDG7IbnNR0Y/Tda5Uz8ToyxXXpw86XuCVAlhXlIvzy1M8O.DWFB6TRCia0hMuAJiXOZy/}"
 
 ### Packages to pacstrap ##
 pacstrappacs=(

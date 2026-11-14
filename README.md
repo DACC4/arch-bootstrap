@@ -11,7 +11,7 @@ Inspired by [this guide](https://gist.github.com/mjkstra/96ce7a5689d753e7a6bdd92
 
 ## 1. Base system
 
-Boot the Arch ISO, connect to the network, then fetch this repo and edit the config variables at the top of the script you want (disk, locale, keymap, timezone, hostname, username, password).
+Boot the Arch ISO, connect to the network, then fetch this repo. Edit the config variables at the top of `install.sh` / `secure-install.sh` if needed (disk, locale, keymap, timezone, hostname, username), then run `setup.sh`. It asks whether to do a secure or non-secure install, then asks for the user password (and the disk encryption password for a secure install).
 
 | Script              | Result                                                                                  |
 | ------------------- | --------------------------------------------------------------------------------------- |
@@ -22,10 +22,10 @@ Boot the Arch ISO, connect to the network, then fetch this repo and edit the con
 pacman -Sy git
 git clone https://github.com/DACC4/arch-bootstrap.git
 cd arch-bootstrap
-./secure-install.sh   # or ./install.sh
+./setup.sh
 ```
 
-> **Warning:** the scripts wipe the target disk (`/dev/nvme0n1` by default) without asking. Change the default password hash (or LUKS passphrase for `secure-install.sh`) before using it.
+> **Warning:** the scripts wipe the target disk (`/dev/nvme0n1` by default) without asking. The install scripts have a default password (`password`) that is only used if you run them directly instead of through `setup.sh`.
 
 For `secure-install.sh`, put the firmware in Secure Boot **setup mode** first so the keys can be enrolled.
 
