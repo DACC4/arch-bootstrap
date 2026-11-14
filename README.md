@@ -42,7 +42,11 @@ cd ~/arch-bootstrap   # cloned automatically by secure-install.sh, otherwise clo
 
 `bootstrap.sh` installs `uv` and `yay`, asks which roles to apply (a `whiptail` checklist; your choice is saved in `ansible/enabled_roles.yaml` and preselected next time), sets up Ansible, then runs `ansible/localhost.yaml`. Skip the prompt with `ROLES=gnome,git,gaze ./bootstrap.sh`. Gaze is off by default.
 
-The playbook applies these roles: base packages, GNOME settings, Gaze (face unlock), zsh, SSH key, Bluetooth, DisplayLink, git, Docker, apps and browsers. To add a role, list it in `ansible/localhost.yaml` (with its `when` condition) and in the checklist in `bootstrap.sh`.
+The playbook applies these roles: base packages, NVIDIA drivers, GNOME settings, Gaze (face unlock), zsh, SSH key, Bluetooth, DisplayLink, git, Docker, apps and browsers. To add a role, list it in `ansible/localhost.yaml` (with its `when` condition) and in the checklist in `bootstrap.sh`.
+
+### NVIDIA
+
+The `nvidia` role detects an NVIDIA GPU with `lspci` and does nothing if there is none. Otherwise it installs `nvidia-open` and friends, sets `NVreg_PreserveVideoMemoryAllocations=1` in modprobe.d and enables `nvidia-suspend`, `nvidia-hibernate` and `nvidia-resume`. On hybrid laptops it also installs `nvidia-prime` and enables `nvidia-powerd`. Reboot afterwards. Note that `secure-install.sh` uses random-key swap, which cannot be used to resume from hibernation.
 
 ### Gaze (face unlock)
 
