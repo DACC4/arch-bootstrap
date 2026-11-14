@@ -6,16 +6,40 @@
 
   vars:
     aur_user: "{{ lookup('env', 'USER') }}"
+    # Roles to apply. bootstrap.sh overrides this with the checklist selection (-e @enabled_roles.yaml).
+    # Running the playbook directly applies everything except the opt-in roles (gaze).
+    enabled_roles:
+      - base_packages
+      - gnome
+      - zsh
+      - ssh_keygen
+      - bluetooth
+      - displaylink
+      - git
+      - docker
+      - apps
+      - browsers
 
   roles:
-    - base_packages
-    - gnome
-    - gaze
-    - zsh
-    - ssh_keygen
-    - bluetooth
-    - displaylink
-    - git
-    - docker
-    - apps
-    - browsers
+    - role: base_packages
+      when: "'base_packages' in enabled_roles"
+    - role: gnome
+      when: "'gnome' in enabled_roles"
+    - role: gaze
+      when: "'gaze' in enabled_roles"
+    - role: zsh
+      when: "'zsh' in enabled_roles"
+    - role: ssh_keygen
+      when: "'ssh_keygen' in enabled_roles"
+    - role: bluetooth
+      when: "'bluetooth' in enabled_roles"
+    - role: displaylink
+      when: "'displaylink' in enabled_roles"
+    - role: git
+      when: "'git' in enabled_roles"
+    - role: docker
+      when: "'docker' in enabled_roles"
+    - role: apps
+      when: "'apps' in enabled_roles"
+    - role: browsers
+      when: "'browsers' in enabled_roles"

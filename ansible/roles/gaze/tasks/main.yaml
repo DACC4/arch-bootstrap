@@ -79,8 +79,10 @@
   when: gaze_ir_camera | length == 0 and gaze_current_ir.stdout | default('') | trim | length == 0
 
 - name: Configure gaze IR camera
+  vars:
+   gaze_ir_value: "{{ gaze_ir_camera if gaze_ir_camera | length > 0 else gaze_detected_ir.stdout | trim }}"
   ansible.builtin.command:
-   cmd: "gaze config set cameras.ir '{{ gaze_ir_camera if gaze_ir_camera | length > 0 else gaze_detected_ir.stdout | trim }}'"
+   cmd: "gaze config set cameras.ir '{{ gaze_ir_value }}'"
   when: >-
    (gaze_ir_camera | length > 0 and gaze_ir_camera != gaze_current_ir.stdout | default('') | trim)
    or (gaze_ir_camera | length == 0 and gaze_detected_ir.stdout | default('') | trim | length > 0)
