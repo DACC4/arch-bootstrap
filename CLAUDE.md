@@ -28,7 +28,7 @@ There is no test suite; validation is lint + syntax check.
 
 ## Ansible architecture
 
-- `ansible/localhost.yaml` is the single playbook: `become: true`, connection local, and a fixed ordered list of roles (`base_packages`, `gnome`, `gaze`, `zsh`, `ssh_keygen`, `bluetooth`, `displaylink`, `git`, `docker`, `apps`, `browsers`), each guarded by `when: "'<role>' in enabled_roles"`. `enabled_roles` defaults in the playbook (gaze excluded) and is overridden by `bootstrap.sh` via `-e @enabled_roles.yaml`. New roles must be added to the playbook (with the `when`) and to `ROLE_CATALOG` in `bootstrap.sh`.
+- `ansible/localhost.yaml` is the single playbook: `become: true`, connection local, and a fixed ordered list of roles (`base_packages`, `nvidia`, `gnome`, `gaze`, `zsh`, `ssh_keygen`, `bluetooth`, `displaylink`, `git`, `docker`, `apps`, `browsers`), each guarded by `when: "'<role>' in enabled_roles"`. `enabled_roles` defaults in the playbook (gaze excluded) and is overridden by `bootstrap.sh` via `-e @enabled_roles.yaml`. New roles must be added to the playbook (with the `when`) and to `ROLE_CATALOG` in `bootstrap.sh`.
 - Because the playbook runs as root, AUR installs use `kewlfft.aur.aur` with `become_user: "{{ aur_user }}"` (`aur_user` = `$USER`, defined in the playbook vars). Official packages use `community.general.pacman`.
 - `gnome` role keeps dconf settings as data in `roles/gnome/defaults/main.yaml` (`gnome_dconf_settings`, values are GVariant strings, so quoting like `"'Adwaita'"` is intentional).
 - `git` role templates `~/.gitconfig` from `roles/git/templates/.gitconfig.j2`.

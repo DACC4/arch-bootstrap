@@ -10,6 +10,7 @@
     # Running the playbook directly applies everything except the opt-in roles (gaze).
     enabled_roles:
       - base_packages
+      - nvidia
       - gnome
       - zsh
       - ssh_keygen
@@ -23,6 +24,8 @@
   roles:
     - role: base_packages
       when: "'base_packages' in enabled_roles"
+    - role: nvidia
+      when: "'nvidia' in enabled_roles"
     - role: gnome
       when: "'gnome' in enabled_roles"
     - role: gaze

@@ -1,0 +1,11 @@
+---
+nvidia_packages:
+ - nvidia-open
+ - nvidia-utils
+ - nvidia-settings
+ - libva-nvidia-driver
+
+nvidia_services:
+ - nvidia-suspend
+ - nvidia-hibernate
+ - nvidia-resume

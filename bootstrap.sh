@@ -7,6 +7,7 @@ SELECTION_FILE=ansible/enabled_roles.yaml
 # name  description  default (previous choice, if any, takes precedence)
 ROLE_CATALOG=(
   "base_packages" "Base packages" ON
+  "nvidia" "NVIDIA drivers (only applied if an NVIDIA GPU is detected)" ON
   "gnome" "GNOME desktop and settings" ON
   "gaze" "Gaze face unlock (needs an IR/RGB camera)" OFF
   "zsh" "zsh shell" ON
@@ -32,7 +33,7 @@ else
     items+=("$name" "${ROLE_CATALOG[i + 1]}" "$state")
   done
   selected=$(whiptail --title "arch-bootstrap" --separate-output \
-    --checklist "Roles to apply (space to toggle, enter to confirm):" 20 70 11 \
+    --checklist "Roles to apply (space to toggle, enter to confirm):" 21 76 12 \
     "${items[@]}" 3>&1 1>&2 2>&3) || { echo "Cancelled"; exit 1; }
 fi
 

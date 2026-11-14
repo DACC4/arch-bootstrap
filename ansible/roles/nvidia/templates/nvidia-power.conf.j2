@@ -1,0 +1,5 @@
+# Managed by Ansible (nvidia role)
+# Save video memory on suspend/hibernate (see Arch wiki: NVIDIA/Tips and tricks)
+options nvidia NVreg_PreserveVideoMemoryAllocations=1
+# /tmp is a tmpfs, so store the saved VRAM on disk
+options nvidia NVreg_TemporaryFilePath=/var/tmp

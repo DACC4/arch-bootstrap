@@ -1,0 +1,49 @@
+---
+- name: Install pciutils (GPU detection)
+  community.general.pacman:
+   name:
+    - pciutils
+   state: present
+
+- name: List display devices
+  check_mode: false
+  ansible.builtin.command:
+   cmd: lspci -nn
+  register: nvidia_lspci
+  changed_when: false
+
+- name: Detect NVIDIA and other GPUs
+  ansible.builtin.set_fact:
+   nvidia_gpu_present: "{{ display_lines | select('search', '\\[10de:') | list | length > 0 }}"
+   nvidia_hybrid: "{{ display_lines | select('search', '\\[(8086|1002):') | list | length > 0 }}"
+  vars:
+   display_lines: "{{ nvidia_lspci.stdout_lines | select('search', 'VGA compatible controller|3D controller|Display controller') | list }}"
+
+- name: Report detection result
+  ansible.builtin.debug:
+   msg: "NVIDIA GPU present: {{ nvidia_gpu_present }}, hybrid (iGPU too): {{ nvidia_hybrid }}"
+
+- name: Configure NVIDIA drivers
+  when: nvidia_gpu_present | bool
+  block:
+   - name: Install NVIDIA drivers
+     community.general.pacman:
+      name: "{{ nvidia_packages + (nvidia_hybrid | bool | ternary(['nvidia-prime'], [])) }}"
+      state: present
+
+   # nvidia-drm.modeset=1 is the default since driver 560, so no kernel cmdline change is needed.
+   - name: Preserve video memory across suspend/hibernate
+     ansible.builtin.template:
+      src: nvidia-power.conf.j2
+      dest: /etc/modprobe.d/nvidia-power.conf
+      owner: root
+      group: root
+      mode: "0644"
+     notify: Rebuild initramfs
+
+   # Triggered by the sleep targets, so they are only enabled, not started.
+   - name: Enable NVIDIA suspend/hibernate/resume services
+     ansible.builtin.systemd_service:
+      name: "{{ item }}"
+      enabled: true
+     loop: "{{ nvidia_services + (nvidia_hybrid | bool | ternary(['nvidia-powerd'], [])) }}"
